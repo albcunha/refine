@@ -221,6 +221,50 @@ export const MyHistoryButtons = () => {
 };
 ```
 
+In some special cases, you may need to pass state between pages. There as many options, such as a context provider or pass it through query params. You also can do it too through your router provider state. Read about it on [react-router-v6 (default)](https://reactrouter.com/docs/en/v6/hooks/use-location), and [react-router-v5](https://v5.reactrouter.com/web/api/Hooks/uselocation).
+
+On Refine.dev, on the first component, we´´ll pass `{ids:[1,2,3,4]}`:
+```tsx 
+import {
+// highlight-next-line
+    useNavigation,
+} from "@pankod/refine-core";
+
+export const MyHistoryButtons = () => {
+// highlight-next-line
+    const { push } = useNavigation();
+
+    return ( 
+        <button
+            onClick={(): void =>
+// highlight-next-line
+                push("posts", {state: {ids: [1,2,3,4]}})
+            }
+        >
+            Push to posts Page
+        </button>
+    );
+};
+```
+On posts page you can do this:
+```tsx 
+import {
+// highlight-next-line
+     useRouterContext,
+} from "@pankod/refine-core";
+
+export const PostList = () => {
+// highlight-next-line
+    const { useLocation } = useRouterContext();
+    const routerLocation = useLocation();
+    const previousState = routerLocation.state
+    return ( 
+        <span> {previousState.ids.join) </span> // => '1,2,3,4'
+    );
+};
+```
+
+
 ## API Reference
 
 ### Properties
